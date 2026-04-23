@@ -1,163 +1,155 @@
 import clsx from 'clsx'
-import { AlertCircle, CheckCircle, Info, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
+import { AlertCircle, CheckCircle, ChevronLeft, ChevronRight, Info, Loader2, X } from 'lucide-react'
 
-// ─── Skeleton ─────────────────────────────────────────────────
 export function Skeleton({ className }) {
   return <div className={clsx('skeleton', className)} />
 }
 
 export function ProductCardSkeleton() {
   return (
-    <div className="card p-4 space-y-3">
-      <Skeleton className="aspect-square w-full rounded-xl" />
+    <div className="card p-5 space-y-4">
+      <Skeleton className="aspect-[1/0.92] w-full rounded-[1.2rem]" />
       <Skeleton className="h-3 w-1/3 rounded" />
-      <Skeleton className="h-4 w-3/4 rounded" />
-      <Skeleton className="h-4 w-1/2 rounded" />
-      <div className="flex justify-between items-center pt-1">
-        <Skeleton className="h-5 w-20 rounded" />
-        <Skeleton className="h-8 w-24 rounded-lg" />
+      <Skeleton className="h-5 w-4/5 rounded" />
+      <Skeleton className="h-4 w-2/3 rounded" />
+      <div className="flex items-center justify-between pt-1">
+        <Skeleton className="h-6 w-24 rounded" />
+        <Skeleton className="h-10 w-28 rounded-full" />
       </div>
     </div>
   )
 }
 
-// ─── Alert ────────────────────────────────────────────────────
 const ALERT_STYLES = {
-  error:   'bg-red-50 border-red-200 text-red-800',
-  success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-  info:    'bg-blue-50 border-blue-200 text-blue-800',
-  warning: 'bg-amber-50 border-amber-200 text-amber-800',
+  error: 'border-red-200 bg-red-50 text-red-800',
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+  info: 'border-blue-200 bg-blue-50 text-blue-800',
+  warning: 'border-amber-200 bg-amber-50 text-amber-800',
 }
 
 const ALERT_ICONS = {
-  error:   <AlertCircle className="w-5 h-5 text-red-500" />,
-  success: <CheckCircle className="w-5 h-5 text-emerald-500" />,
-  info:    <Info className="w-5 h-5 text-blue-500" />,
-  warning: <AlertCircle className="w-5 h-5 text-amber-500" />,
+  error: <AlertCircle className="h-5 w-5 text-red-500" />,
+  success: <CheckCircle className="h-5 w-5 text-emerald-500" />,
+  info: <Info className="h-5 w-5 text-blue-500" />,
+  warning: <AlertCircle className="h-5 w-5 text-amber-500" />,
 }
 
-export function Alert({ type = 'info', title, message, onClose }) {
+export function Alert({ type = 'info', title, message, onClose, className }) {
   if (!message) return null
+
   return (
-    <div className={clsx('flex items-start gap-3 p-4 rounded-xl border text-sm', ALERT_STYLES[type])}>
+    <div className={clsx('flex items-start gap-3 rounded-2xl border p-4 text-sm', ALERT_STYLES[type], className)}>
       {ALERT_ICONS[type]}
       <div className="flex-1">
-        {title && <p className="font-semibold mb-0.5">{title}</p>}
+        {title && <p className="mb-0.5 font-semibold">{title}</p>}
         <p>{message}</p>
       </div>
       {onClose && (
-        <button onClick={onClose} className="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity">
-          <X className="w-4 h-4" />
+        <button onClick={onClose} className="flex-shrink-0 opacity-60 transition hover:opacity-100">
+          <X className="h-4 w-4" />
         </button>
       )}
     </div>
   )
 }
 
-// ─── Spinner ──────────────────────────────────────────────────
 export function Spinner({ size = 'md', className }) {
-  const sizes = { sm: 'w-4 h-4', md: 'w-6 h-6', lg: 'w-10 h-10' }
-  return (
-    <Loader2 className={clsx('animate-spin text-primary-600', sizes[size], className)} />
-  )
+  const sizes = { sm: 'h-4 w-4', md: 'h-6 w-6', lg: 'h-10 w-10' }
+  return <Loader2 className={clsx('animate-spin text-primary-700', sizes[size], className)} />
 }
 
 export function PageLoader() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
-      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-600 to-medical-teal flex items-center justify-center animate-pulse-slow">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+      <div className="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-primary-700 text-white shadow-[0_24px_48px_-28px_rgba(11,76,147,0.75)]">
         <Spinner size="md" className="text-white" />
       </div>
-      <p className="text-slate-400 text-sm font-medium">Loading…</p>
+      <p className="text-sm font-medium text-slate-500">Loading...</p>
     </div>
   )
 }
 
-// ─── Badge ────────────────────────────────────────────────────
 const BADGE_STYLES = {
-  default:  'bg-slate-100 text-slate-600',
-  primary:  'bg-primary-100 text-primary-700',
-  success:  'bg-emerald-100 text-emerald-700',
-  warning:  'bg-amber-100 text-amber-700',
-  danger:   'bg-red-100 text-red-600',
-  teal:     'bg-teal-100 text-teal-700',
+  default: 'bg-slate-100 text-slate-600',
+  primary: 'bg-blue-100 text-primary-700',
+  success: 'bg-emerald-100 text-emerald-700',
+  warning: 'bg-amber-100 text-amber-700',
+  danger: 'bg-red-100 text-red-600',
+  teal: 'bg-emerald-100 text-emerald-700',
 }
 
 export function Badge({ variant = 'default', children, className }) {
-  return (
-    <span className={clsx('badge', BADGE_STYLES[variant], className)}>
-      {children}
-    </span>
-  )
+  return <span className={clsx('badge', BADGE_STYLES[variant], className)}>{children}</span>
 }
 
-// ─── Pagination ───────────────────────────────────────────────
 export function Pagination({ page, totalPages, onPageChange }) {
   if (totalPages <= 1) return null
 
   const pages = []
   const range = 2
-  for (let i = Math.max(1, page - range); i <= Math.min(totalPages, page + range); i++) {
-    pages.push(i)
+
+  for (let index = Math.max(1, page - range); index <= Math.min(totalPages, page + range); index += 1) {
+    pages.push(index)
   }
 
   return (
-    <nav className="flex items-center justify-center gap-1">
+    <nav className="flex items-center justify-center gap-2">
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
-        className="p-2 rounded-lg border border-slate-200 text-slate-500 hover:border-primary-300 hover:text-primary-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+        className="rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 transition hover:border-slate-300 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="h-4 w-4" />
       </button>
 
       {pages[0] > 1 && (
         <>
-          <button onClick={() => onPageChange(1)} className="px-3 py-1.5 rounded-lg text-sm border border-slate-200 hover:border-primary-300 hover:text-primary-600 transition-all">1</button>
-          {pages[0] > 2 && <span className="px-1 text-slate-400">…</span>}
+          <button onClick={() => onPageChange(1)} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-primary-700">1</button>
+          {pages[0] > 2 && <span className="px-1 text-slate-400">...</span>}
         </>
       )}
 
-      {pages.map(p => (
-        <button key={p} onClick={() => onPageChange(p)}
+      {pages.map((current) => (
+        <button
+          key={current}
+          onClick={() => onPageChange(current)}
           className={clsx(
-            'px-3 py-1.5 rounded-lg text-sm font-medium transition-all border',
-            p === page
-              ? 'bg-primary-600 border-primary-600 text-white'
-              : 'border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-600'
+            'rounded-full border px-4 py-2 text-sm font-semibold transition',
+            current === page
+              ? 'border-primary-700 bg-primary-700 text-white'
+              : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-primary-700'
           )}
         >
-          {p}
+          {current}
         </button>
       ))}
 
       {pages[pages.length - 1] < totalPages && (
         <>
-          {pages[pages.length - 1] < totalPages - 1 && <span className="px-1 text-slate-400">…</span>}
-          <button onClick={() => onPageChange(totalPages)} className="px-3 py-1.5 rounded-lg text-sm border border-slate-200 hover:border-primary-300 hover:text-primary-600 transition-all">{totalPages}</button>
+          {pages[pages.length - 1] < totalPages - 1 && <span className="px-1 text-slate-400">...</span>}
+          <button onClick={() => onPageChange(totalPages)} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-primary-700">{totalPages}</button>
         </>
       )}
 
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
-        className="p-2 rounded-lg border border-slate-200 text-slate-500 hover:border-primary-300 hover:text-primary-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+        className="rounded-full border border-slate-200 bg-white p-2.5 text-slate-500 transition hover:border-slate-300 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="h-4 w-4" />
       </button>
     </nav>
   )
 }
 
-// ─── Empty State ──────────────────────────────────────────────
 export function EmptyState({ icon: Icon, title, description, action }) {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center px-4">
-      <div className="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center mb-5">
-        {Icon && <Icon className="w-9 h-9 text-primary-300" />}
+    <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
+      <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-[1.7rem] bg-blue-50">
+        {Icon && <Icon className="h-9 w-9 text-primary-300" />}
       </div>
-      <h3 className="text-lg font-semibold text-slate-700 mb-2">{title}</h3>
-      {description && <p className="text-slate-400 text-sm mb-6 max-w-xs">{description}</p>}
+      <h3 className="mb-2 text-lg font-semibold text-slate-800">{title}</h3>
+      {description && <p className="mb-6 max-w-xs text-sm text-slate-500">{description}</p>}
       {action}
     </div>
   )
