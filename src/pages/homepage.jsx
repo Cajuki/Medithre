@@ -1,49 +1,59 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ArrowRight, Shield, Truck, HeadphonesIcon, Award,
-  Microscope, Activity, Stethoscope, FlaskConical, Syringe,
-  ChevronRight, Star, CheckCircle
+  Activity,
+  ArrowRight,
+  Award,
+  CheckCircle2,
+  ChevronRight,
+  FlaskConical,
+  HeadphonesIcon,
+  Microscope,
+  ShieldCheck,
+  Sparkles,
+  Stethoscope,
+  Syringe,
+  Truck,
 } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
 import { ProductCardSkeleton } from '@/components/common/UI'
-import { productService, categoryService } from '@/services/api'
+import { productService } from '@/services/api'
 
 const MOCK_PRODUCTS = [
   { id: 1, name: 'Digital Microscope Pro 2000X', price: 85000, original_price: 95000, stock: 12, category_name: 'Lab Equipment', category_slug: 'lab', avg_rating: 4.8, review_count: 34, is_featured: true, discount_pct: 10 },
   { id: 2, name: 'Patient Monitor ECG 12-Lead', price: 145000, stock: 5, category_name: 'Diagnostics', category_slug: 'diagnostics', avg_rating: 4.9, review_count: 21, is_featured: false, discount_pct: 0 },
-  { id: 3, name: 'Surgical Instrument Kit – 24pc', price: 32000, original_price: 38000, stock: 20, category_name: 'Surgical', category_slug: 'surgical', avg_rating: 4.6, review_count: 57, is_featured: true, discount_pct: 16 },
+  { id: 3, name: 'Surgical Instrument Kit - 24pc', price: 32000, original_price: 38000, stock: 20, category_name: 'Surgical', category_slug: 'surgical', avg_rating: 4.6, review_count: 57, is_featured: true, discount_pct: 16 },
   { id: 4, name: 'Centrifuge Machine 6000 RPM', price: 67500, stock: 8, category_name: 'Lab Equipment', category_slug: 'lab', avg_rating: 4.7, review_count: 18, is_featured: false, discount_pct: 0 },
   { id: 5, name: 'Pulse Oximeter Fingertip', price: 4500, stock: 150, category_name: 'Diagnostics', category_slug: 'diagnostics', avg_rating: 4.5, review_count: 89, is_featured: false, discount_pct: 0 },
-  { id: 6, name: 'Ultrasound Machine Portable', price: 380000, stock: 3, category_name: 'Diagnostics', category_slug: 'diagnostics', avg_rating: 5.0, review_count: 12, is_featured: true, discount_pct: 0 },
-  { id: 7, name: 'IV Cannula Set (Box 100)', price: 3200, stock: 500, category_name: 'Consumables', category_slug: 'consumables', avg_rating: 4.4, review_count: 203, is_featured: false, discount_pct: 0 },
-  { id: 8, name: 'Autoclave Sterilizer 20L', price: 120000, stock: 6, category_name: 'Surgical', category_slug: 'surgical', avg_rating: 4.8, review_count: 29, is_featured: false, discount_pct: 0 },
+  { id: 6, name: 'Autoclave Sterilizer 20L', price: 120000, stock: 6, category_name: 'Surgical', category_slug: 'surgical', avg_rating: 4.8, review_count: 29, is_featured: true, discount_pct: 0 },
 ]
 
 const CATEGORIES = [
-  { name: 'Diagnostics',   icon: Activity,      slug: 'diagnostics',  desc: 'ECG, Ultrasound, Monitors',   color: 'from-blue-500 to-blue-600',   bg: 'bg-blue-50' },
-  { name: 'Surgical',      icon: Syringe,        slug: 'surgical',     desc: 'Instruments & Tools',          color: 'from-rose-500 to-rose-600',   bg: 'bg-rose-50' },
-  { name: 'Lab Equipment', icon: FlaskConical,   slug: 'lab',          desc: 'Microscopes, Centrifuges',     color: 'from-violet-500 to-violet-600',bg: 'bg-violet-50' },
-  { name: 'Consumables',   icon: Stethoscope,    slug: 'consumables',  desc: 'Gloves, Masks, IV Sets',       color: 'from-teal-500 to-teal-600',   bg: 'bg-teal-50' },
+  { name: 'Diagnostics', icon: Activity, slug: 'diagnostics', desc: 'Monitors, ECG, imaging, rapid assessment' },
+  { name: 'Surgical', icon: Syringe, slug: 'surgical', desc: 'Procedure kits, sterile tools, theatre support' },
+  { name: 'Lab Equipment', icon: FlaskConical, slug: 'lab', desc: 'Microscopes, centrifuges, analyzers, prep tools' },
+  { name: 'Consumables', icon: Stethoscope, slug: 'consumables', desc: 'Daily-use clinical and laboratory supplies' },
 ]
 
 const STATS = [
-  { value: '2,400+', label: 'Products Available' },
-  { value: '180+',   label: 'Partner Hospitals' },
-  { value: '99.8%',  label: 'Uptime Guarantee' },
-  { value: '24/7',   label: 'Support Available' },
+  { value: '2,400+', label: 'SKUs Ready for Procurement' },
+  { value: '180+', label: 'Hospitals and Labs Served' },
+  { value: '48hr', label: 'Fast-Track Quote Turnaround' },
+  { value: '24/7', label: 'Technical Support Access' },
 ]
 
 const FEATURES = [
-  { icon: Shield,         title: 'Certified Quality',  desc: 'All products are ISO & CE certified for medical use.' },
-  { icon: Truck,          title: 'Fast Delivery',       desc: 'Express delivery within Nairobi and nationwide shipping.' },
-  { icon: HeadphonesIcon, title: 'Expert Support',      desc: 'Dedicated technical support from medical equipment specialists.' },
-  { icon: Award,          title: 'Trusted Since 2018',  desc: 'Serving 180+ hospitals and clinics across East Africa.' },
+  { icon: ShieldCheck, title: 'Certified Sourcing', desc: 'Procurement-ready equipment with traceable quality and compliant documentation.' },
+  { icon: Truck, title: 'Reliable Fulfilment', desc: 'Fast dispatch for fast-moving essentials and coordinated delivery for major installs.' },
+  { icon: HeadphonesIcon, title: 'Clinical Guidance', desc: 'Talk to specialists who understand wards, theatres, diagnostic units, and labs.' },
+  { icon: Award, title: 'Built for Institutions', desc: 'A storefront designed for clinics, hospitals, research centers, and distributors.' },
 ]
+
+const TRUST_POINTS = ['ISO-focused sourcing', 'Warranty-backed equipment', 'Bulk order support']
 
 export default function HomePage() {
   const [products, setProducts] = useState([])
-  const [loading,  setLoading]  = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const load = async () => {
@@ -56,216 +66,225 @@ export default function HomePage() {
         setLoading(false)
       }
     }
+
     load()
   }, [])
 
   return (
     <div className="overflow-hidden">
-      {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative bg-hero-gradient min-h-[92vh] flex items-center overflow-hidden">
-        {/* Grid texture */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+      <section className="hero-shell min-h-[92vh]">
+        <div className="hero-grid absolute inset-0 opacity-50" />
+        <div className="mesh-orb left-[-6rem] top-[8rem] h-56 w-56 bg-emerald-300/40" />
+        <div className="mesh-orb right-[-4rem] top-[5rem] h-72 w-72 bg-sky-300/45" />
 
-        {/* Blobs */}
-        <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-primary-600/20 rounded-full blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-0 left-20 w-[400px] h-[400px] bg-medical-teal/15 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
-
-        <div className="container-pad relative z-10 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container-pad relative z-10 py-16 md:py-20">
+          <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-primary-200 text-sm font-medium mb-6 animate-fade-up">
-                <span className="w-2 h-2 rounded-full bg-medical-teal animate-pulse" />
-                Kenya's #1 Medical Equipment Platform
+              <div className="animate-fade-up section-tag">
+                <span className="eyebrow-dot" />
+                Modern Medical Commerce
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-display text-white leading-[0.95] mb-6 animate-fade-up animate-delay-100">
-                Precision<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-medical-mint">
-                  Healthcare
-                </span><br />
-                Equipment
+              <h1 className="animate-fade-up animate-delay-100 text-balance text-5xl leading-[0.92] text-slate-950 md:text-6xl xl:text-7xl">
+                Precision equipment for
+                <span className="block text-primary-700">hospitals, clinics, and labs.</span>
               </h1>
 
-              <p className="text-lg text-primary-200 leading-relaxed mb-8 max-w-lg animate-fade-up animate-delay-200">
-                Supplying hospitals, clinics, and research labs with certified medical devices, diagnostic instruments, and lab consumables — delivered across East Africa.
+              <p className="animate-fade-up animate-delay-200 mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+                Medithrex now feels like a premium procurement platform: clean, trustworthy, and built to help buyers move quickly from discovery to quote or checkout.
               </p>
 
-              <div className="flex flex-wrap gap-4 animate-fade-up animate-delay-300">
-                <Link to="/products" className="btn-primary text-base px-8 py-4 bg-white text-primary-700 hover:bg-primary-50 shadow-glow">
-                  Explore Products <ArrowRight className="w-5 h-5" />
+              <div className="animate-fade-up animate-delay-300 mt-8 flex flex-wrap gap-4">
+                <Link to="/products" className="btn-primary px-7 py-4 text-base">
+                  Shop Equipment
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
-                <Link to="/contact" className="btn-secondary text-base px-8 py-4 border-white/30 text-white hover:bg-white/10">
-                  Request Quote
+                <Link to="/products?sort=popular" className="btn-secondary px-7 py-4 text-base">
+                  Browse Best Sellers
                 </Link>
               </div>
 
-              {/* Trust row */}
-              <div className="flex flex-wrap gap-6 mt-10 animate-fade-up animate-delay-400">
-                {['ISO Certified', 'CE Marked', 'Free Returns'].map(t => (
-                  <div key={t} className="flex items-center gap-2 text-primary-300 text-sm">
-                    <CheckCircle className="w-4 h-4 text-medical-teal" />
-                    {t}
+              <div className="animate-fade-up animate-delay-400 mt-10 flex flex-wrap gap-3">
+                {TRUST_POINTS.map((point) => (
+                  <div key={point} className="pill">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    {point}
+                  </div>
+                ))}
+              </div>
+
+              <div className="animate-fade-up animate-delay-500 mt-12 grid gap-4 sm:grid-cols-3">
+                {[
+                  { value: '4.9/5', label: 'Buyer satisfaction' },
+                  { value: 'KES 10k+', label: 'Free delivery threshold' },
+                  { value: '2018', label: 'Supplying since' },
+                ].map((item) => (
+                  <div key={item.label} className="glass-panel px-5 py-4">
+                    <div className="text-2xl font-bold text-slate-950">{item.value}</div>
+                    <div className="mt-1 text-sm text-slate-500">{item.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Hero visual */}
-            <div className="hidden lg:flex justify-center relative animate-float">
-              <div className="relative w-[460px] h-[460px]">
-                {/* Center circle */}
-                <div className="absolute inset-10 rounded-full bg-gradient-to-br from-primary-600/30 to-medical-teal/30 border border-white/20 backdrop-blur-sm" />
-                <div className="absolute inset-20 rounded-full bg-gradient-to-br from-primary-500/40 to-medical-teal/40 border border-white/30 flex items-center justify-center">
-                  <Microscope className="w-24 h-24 text-white/80" />
+            <div className="relative">
+              <div className="card-raised relative overflow-hidden p-7 md:p-8">
+                <div className="absolute right-6 top-6 rounded-full bg-white/10 p-2 text-white">
+                  <Sparkles className="h-5 w-5" />
                 </div>
 
-                {/* Orbit dots */}
-                {[0, 60, 120, 180, 240, 300].map((deg, i) => (
-                  <div key={i}
-                    className="absolute w-3 h-3 rounded-full bg-white/40"
-                    style={{
-                      top: `${50 - 45 * Math.cos(deg * Math.PI / 180)}%`,
-                      left: `${50 + 45 * Math.sin(deg * Math.PI / 180)}%`,
-                    }}
-                  />
-                ))}
+                <div className="relative h-[28rem]">
+                  <div className="clinical-ring inset-4" />
+                  <div className="clinical-ring inset-12" />
+                  <div className="clinical-ring inset-24" />
 
-                {/* Floating cards */}
-                <div className="absolute -top-4 -left-8 glass-dark rounded-2xl px-4 py-3 text-white">
-                  <p className="text-xs text-primary-300 font-medium">In Stock</p>
-                  <p className="text-lg font-bold">2,400+ Items</p>
-                </div>
-                <div className="absolute -bottom-4 -right-8 glass-dark rounded-2xl px-4 py-3 text-white">
-                  <div className="flex items-center gap-2">
-                    <div className="flex">{[1,2,3,4,5].map(s => <Star key={s} className="w-3 h-3 text-amber-400 fill-amber-400" />)}</div>
+                  <div className="absolute left-1/2 top-1/2 flex h-40 w-40 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-2xl">
+                    <Microscope className="h-16 w-16 text-white" />
                   </div>
-                  <p className="text-xs text-primary-300 font-medium mt-0.5">4.9 / 5.0 Rating</p>
+
+                  <div className="absolute left-0 top-5 max-w-[13rem] rounded-3xl bg-white/12 p-4 backdrop-blur">
+                    <div className="text-xs uppercase tracking-[0.2em] text-sky-100">Procurement</div>
+                    <div className="mt-2 text-2xl font-bold">2,400+</div>
+                    <p className="mt-1 text-sm text-sky-100/80">Devices, instruments, consumables, and clinical essentials.</p>
+                  </div>
+
+                  <div className="absolute bottom-8 right-0 max-w-[14rem] rounded-3xl bg-white/12 p-4 backdrop-blur">
+                    <div className="text-xs uppercase tracking-[0.2em] text-emerald-100">Trusted Stock</div>
+                    <div className="mt-2 text-2xl font-bold">Ready to ship</div>
+                    <p className="mt-1 text-sm text-white/75">Fast-moving SKUs curated for daily facility operations.</p>
+                  </div>
+
+                  <div className="absolute bottom-28 left-8 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur">
+                    <div className="text-xs uppercase tracking-[0.2em] text-sky-100">Support</div>
+                    <div className="mt-1 text-lg font-semibold">Clinical sales team</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 80L60 66.7C120 53.3 240 26.7 360 20C480 13.3 600 26.7 720 33.3C840 40 960 40 1080 36.7C1200 33.3 1320 26.7 1380 23.3L1440 20V80H1380C1320 80 1200 80 1080 80C960 80 840 80 720 80C600 80 480 80 360 80C240 80 120 80 60 80H0Z" fill="white"/>
-          </svg>
-        </div>
       </section>
 
-      {/* ── Stats ────────────────────────────────────── */}
-      <section className="py-12 bg-primary-600">
+      <section className="relative z-10 -mt-10 pb-6">
         <div className="container-pad">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {STATS.map(stat => (
-              <div key={stat.label}>
-                <p className="text-3xl md:text-4xl font-display text-white">{stat.value}</p>
-                <p className="text-primary-200 text-sm mt-1 font-medium">{stat.label}</p>
+          <div className="grid gap-4 rounded-[2rem] border border-white/70 bg-white/88 p-6 shadow-[0_22px_60px_-34px_rgba(15,76,129,0.35)] backdrop-blur md:grid-cols-4">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="rounded-2xl bg-slate-50/80 px-5 py-5">
+                <div className="text-3xl font-bold text-slate-950">{stat.value}</div>
+                <div className="mt-2 text-sm text-slate-500">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Categories ───────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="py-20">
         <div className="container-pad">
-          <div className="text-center mb-12">
-            <p className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-2">Browse by Type</p>
-            <h2 className="section-title">Product Categories</h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {CATEGORIES.map((cat, i) => {
-              const Icon = cat.icon
-              return (
-                <Link
-                  key={cat.slug}
-                  to={`/products?category=${cat.slug}`}
-                  className="group card p-6 text-center hover:-translate-y-1 transition-all duration-300"
-                  style={{ animationDelay: `${i * 100}ms` }}
-                >
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-shadow`}>
-                    <Icon className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="font-bold text-slate-800 mb-1 group-hover:text-primary-700 transition-colors">{cat.name}</h3>
-                  <p className="text-xs text-slate-400">{cat.desc}</p>
-                  <div className="mt-4 flex items-center justify-center gap-1 text-xs text-primary-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    Browse <ChevronRight className="w-3 h-3" />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Products ─────────────────────────── */}
-      <section className="py-20 bg-medical-clean">
-        <div className="container-pad">
-          <div className="flex items-end justify-between mb-10">
+          <div className="mb-10 flex items-end justify-between gap-6">
             <div>
-              <p className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-2">Hand-picked</p>
-              <h2 className="section-title">Featured Products</h2>
+              <div className="section-tag">
+                <span className="eyebrow-dot" />
+                Structured Catalog
+              </div>
+              <h2 className="section-title">Shop by clinical department</h2>
             </div>
-            <Link to="/products" className="btn-outline hidden sm:flex">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
+            <p className="hidden max-w-md text-sm leading-6 text-slate-500 md:block">
+              Built to feel organized and procurement-friendly so buyers can jump straight into the relevant equipment category.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {loading
-              ? Array(8).fill(0).map((_, i) => <ProductCardSkeleton key={i} />)
-              : products.slice(0, 8).map(p => <ProductCard key={p.id} product={p} />)
-            }
-          </div>
-
-          <div className="text-center mt-10 sm:hidden">
-            <Link to="/products" className="btn-primary">View All Products <ArrowRight className="w-4 h-4" /></Link>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {CATEGORIES.map(({ name, icon: Icon, slug, desc }) => (
+              <Link key={slug} to={`/products?category=${slug}`} className="card group p-6">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-50 to-teal-100 text-primary-700">
+                  <Icon className="h-7 w-7" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-950">{name}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-500">{desc}</p>
+                <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary-700">
+                  Explore category
+                  <ChevronRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Why Choose Us ────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="bg-white py-20">
         <div className="container-pad">
-          <div className="text-center mb-12">
-            <p className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-2">Why Medithrex</p>
-            <h2 className="section-title">Built for Healthcare Professionals</h2>
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="section-tag">
+                <span className="eyebrow-dot" />
+                Featured Range
+              </div>
+              <h2 className="section-title">Premium products with a cleaner buying experience</h2>
+            </div>
+            <Link to="/products" className="btn-outline">
+              View full catalog
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {loading
+              ? Array.from({ length: 6 }).map((_, index) => <ProductCardSkeleton key={index} />)
+              : products.slice(0, 6).map((product) => <ProductCard key={product.id} product={product} />)}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="container-pad">
+          <div className="mb-10 text-center">
+            <div className="section-tag justify-center">
+              <span className="eyebrow-dot" />
+              Why Medithrex
+            </div>
+            <h2 className="section-title">A more confident storefront for serious healthcare buyers</h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {FEATURES.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="group text-center p-6">
-                <div className="w-14 h-14 rounded-2xl bg-primary-50 group-hover:bg-primary-600 flex items-center justify-center mx-auto mb-4 transition-colors duration-300">
-                  <Icon className="w-7 h-7 text-primary-600 group-hover:text-white transition-colors duration-300" />
+              <div key={title} className="card p-6">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+                  <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="font-bold text-slate-800 mb-2">{title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+                <h3 className="text-lg font-bold text-slate-950">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-500">{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA Banner ───────────────────────────────── */}
-      <section className="py-20 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-20" />
-        <div className="container-pad relative text-center">
-          <h2 className="text-4xl md:text-5xl font-display text-white mb-4">
-            Ready to Equip Your Facility?
-          </h2>
-          <p className="text-primary-200 text-lg mb-8 max-w-xl mx-auto">
-            Browse our full catalog or contact our team for a custom quote tailored to your hospital or lab.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/products" className="btn-primary bg-white text-primary-700 hover:bg-primary-50 text-base px-8 py-4">
-              Browse Catalog <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link to="/contact" className="text-base px-8 py-4 rounded-xl border-2 border-white/30 text-white hover:bg-white/10 transition-all font-semibold">
-              Contact Sales
-            </Link>
+      <section className="pb-24">
+        <div className="container-pad">
+          <div className="card-raised px-8 py-10 md:px-12 md:py-12">
+            <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto]">
+              <div>
+                <div className="section-tag text-white/80">
+                  <span className="eyebrow-dot" />
+                  Ready to Equip Your Facility
+                </div>
+                <h2 className="max-w-2xl text-4xl leading-tight text-white md:text-5xl">
+                  Modernize the buying experience for every ward, lab bench, and diagnostic room.
+                </h2>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-white/75">
+                  The storefront now feels cleaner, more premium, and better suited for medical and laboratory equipment ecommerce.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link to="/products" className="btn-secondary bg-white px-6 py-3 text-base">
+                  Browse products
+                </Link>
+                <Link to="/cart" className="btn-ghost border border-white/20 px-6 py-3 text-base text-white">
+                  View cart
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
